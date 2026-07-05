@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Ипотечный калькулятор</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        /* ========== CSS-ПЕРЕМЕННЫЕ (Тёмная тема) ========== */
+        :root {
+            --bg-body: #0b0b0b;
+            --bg-card: #1a1a1a;
+            --bg-result: #121212;
+            --bg-param: #121212;
+            --bg-select: #121212;
+            --bg-radio: #121212;
+            --bg-switch: #333;
+            --bg-slider: #333;
+            --bg-input: #121212;
+            --bg-hover: #2a2a2a;
+            --bg-option-hover: rgba(255,221,45,0.12);
+            --bg-option-selected: rgba(255,221,45,0.15);
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --text-muted: #888888;
+            --text-dim: #666666;
+            --accent: #FFDD2D;
+            --accent-hover: #f0cc00;
+            --accent-rgb: 255, 221, 45;
+            --border-color: #2a2a2a;
+            --shadow: 0 10px 30px rgba(0,0,0,0.6);
+            --popup-bg: #1a1a1a;
+            --popup-overlay: rgba(0,0,0,0.7);
+            --switch-off: #333;
+            --switch-on: #333;
+            --saving-bg: rgba(0,168,107,0.12);
+            --saving-text: #00A86B;
+            --error-text: #ff4d4d;
+            --result-bg: #121212;
+        }
+
+        /* ===== СВЕТЛАЯ ТЕМА (Сбер) – тёмно-зелёный, фон результата 0.02 ===== */
+        .theme-light {
+            --bg-body: #f0f2f5;
+            --bg-card: #ffffff;
+            --bg-result: #ffffff;
+            --bg-param: #f8fafc;
+            --bg-select: #ffffff;
+            --bg-radio: #ffffff;
+            --bg-switch: #d1d5db;
+            --bg-slider: #d1d5db;
+            --bg-input: #ffffff;
+            --bg-hover: #e5e7eb;
+            --bg-option-hover: rgba(46,125,50,0.08);
+            --bg-option-selected: rgba(46,125,50,0.12);
+            --text-primary: #1a1a1a;
+            --text-secondary: #4b5563;
+            --text-muted: #6b7280;
+            --text-dim: #9ca3af;
+            --accent: #2e7d32;
+            --accent-hover: #1b5e20;
+            --accent-rgb: 46, 125, 50;
+            --border-color: #e5e7eb;
+            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --popup-bg: #ffffff;
+            --popup-overlay: rgba(0,0,0,0.3);
+            --switch-off: #d1d5db;
+            --switch-on: #2e7d32;
+            --saving-bg: rgba(46,125,50,0.12);
+            --saving-text: #2e7d32;
+            --result-bg: rgba(46,125,50,0.02);
+        }
+
+        /* ===== КРАСНАЯ ТЕМА (Альфа) – тёмно-красный, фон результата 0.02 ===== */
+        .theme-red {
+            --bg-body: #f5f5f5;
+            --bg-card: #ffffff;
+            --bg-result: #ffffff;
+            --bg-param: #faf8f8;
+            --bg-select: #ffffff;
+            --bg-radio: #ffffff;
+            --bg-switch: #d1c5c5;
+            --bg-slider: #d1c5c5;
+            --bg-input: #ffffff;
+            --bg-hover: #f0e5e5;
+            --bg-option-hover: rgba(198,40,40,0.08);
+            --bg-option-selected: rgba(198,40,40,0.12);
+            --text-primary: #1a1a1a;
+            --text-secondary: #5a4b4b;
+            --text-muted: #7a6b6b;
+            --text-dim: #a09090;
+            --accent: #c62828;
+            --accent-hover: #b71c1c;
+            --accent-rgb: 198, 40, 40;
+            --border-color: #e5d5d5;
+            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --popup-bg: #ffffff;
+            --popup-overlay: rgba(0,0,0,0.3);
+            --switch-off: #d1c5c5;
+            --switch-on: #c62828;
+            --saving-bg: rgba(198,40,40,0.12);
+            --saving-text: #c62828;
+            --result-bg: rgba(198,40,40,0.02);
+        }
+
+        /* ===== СИНЯЯ ТЕМА (ВТБ) – тёмно-синий, фон результата 0.02 ===== */
+        .theme-blue {
+            --bg-body: #f0f2f5;
+            --bg-card: #ffffff;
+            --bg-result: #ffffff;
+            --bg-param: #f8f9fc;
+            --bg-select: #ffffff;
+            --bg-radio: #ffffff;
+            --bg-switch: #c5cddb;
+            --bg-slider: #c5cddb;
+            --bg-input: #ffffff;
+            --bg-hover: #e5e9f0;
+            --bg-option-hover: rgba(29,78,216,0.08);
+            --bg-option-selected: rgba(29,78,216,0.12);
+            --text-primary: #1a1a1a;
+            --text-secondary: #4b5563;
+            --text-muted: #6b7280;
+            --text-dim: #9ca3af;
+            --accent: #1d4ed8;
+            --accent-hover: #1e40af;
+            --accent-rgb: 29, 78, 216;
+            --border-color: #e5e7eb;
+            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --popup-bg: #ffffff;
+            --popup-overlay: rgba(0,0,0,0.3);
+            --switch-off: #c5cddb;
+            --switch-on: #1d4ed8;
+            --saving-bg: rgba(29,78,216,0.12);
+            --saving-text: #1d4ed8;
+            --result-bg: rgba(29,78,216,0.02);
+        }
+
+        /* ========== ОБЩИЕ СТИЛИ ========== */
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family:'Inter',sans-serif;
+            background: var(--bg-body);
+            min-height:100vh;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            padding:14px;
+            transition: background 0.3s, color 0.3s;
+        }
+        .app-wrapper {
+            width:100%;
+            max-width:1200px;
+            display:flex;
+            flex-direction:column;
+            align-items:flex-end;
+            gap:12px;
+        }
+        .theme-switcher-wrapper {
+            width:100%;
+            display:flex;
+            justify-content:flex-end;
+            padding:0 4px;
+        }
+        .theme-switcher {
+            display:flex;
+            gap:8px;
+            background: var(--bg-card);
+            padding:6px 10px;
+            border-radius:12px;
+            border:1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
+        }
+        .theme-btn {
+            width:44px;
+            height:34px;
+            border-radius:8px;
+            border:2px solid transparent;
+            cursor:pointer;
+            transition: transform 0.2s, border-color 0.2s, background 0.2s;
+            flex-shrink:0;
+        }
+        .theme-btn:hover { transform:scale(1.05); }
+        .theme-btn.active {
+            border-color: var(--text-primary);
+            box-shadow: 0 0 0 2px var(--bg-body);
+        }
+        .theme-btn-dark { background: #1a1a1a; }
+        .theme-btn-light { background: #2e7d32; }
+        .theme-btn-red { background: #c62828; }
+        .theme-btn-blue { background: #1d4ed8; }
+
+        .card {
+            width:100%;
+            background: var(--bg-card);
+            border-radius:24px;
+            padding:22px 18px;
+            border:1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
+        }
+        .header-global { display:block; }
+        .header-global h1 {
+            font-size:22px;
+            font-weight:600;
+            color: var(--text-primary);
+            letter-spacing:-0.3px;
+            margin-bottom:4px;
+            transition: color 0.3s;
+        }
+        .header-global .subtitle {
+            color: var(--text-muted);
+            font-size:14px;
+            font-weight:400;
+            margin-bottom:24px;
+            transition: color 0.3s;
+        }
+        .grid { display:flex; flex-direction:column; gap:22px; }
+        .params { display:flex; flex-direction:column; gap:20px; }
+        .params-header { display:none; }
+        .params-header h1 {
+            font-size:28px;
+            font-weight:600;
+            color: var(--text-primary);
+            letter-spacing:-0.4px;
+            margin-bottom:4px;
+            transition: color 0.3s;
+        }
+        .params-header .subtitle {
+            color: var(--text-muted);
+            font-size:16px;
+            font-weight:400;
+            margin-bottom:20px;
+            transition: color 0.3s;
+        }
+        .param-group { display:flex; flex-direction:column; gap:12px; }
+        .param-group label {
+            font-size:16px;
+            font-weight:500;
+            color: var(--text-secondary);
+            display:flex;
+            justify-content:space-between;
+            transition: color 0.3s;
+        }
+        .param-group label span:last-child {
+            color: var(--text-primary);
+            font-weight:600;
+            font-size:17px;
+            transition: color 0.3s;
+        }
+        .param-group input[type="range"] {
+            width:100%;
+            -webkit-appearance:none;
+            appearance:none;
+            height:4px;
+            border-radius:2px;
+            background: var(--bg-slider);
+            outline:none;
+            transition: background 0.3s;
+        }
+        .param-group input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance:none;
+            appearance:none;
+            width:14px;
+            height:14px;
+            border-radius:50%;
+            background: var(--accent);
+            cursor:pointer;
+            box-shadow:0 0 0 0 rgba(var(--accent-rgb),0.3);
+            transition:0.1s;
+        }
+        .param-group input[type="range"]::-moz-range-thumb {
+            width:14px;
+            height:14px;
+            border-radius:50%;
+            background: var(--accent);
+            cursor:pointer;
+            border:none;
+        }
+        .error-text {
+            font-size:13px;
+            color: var(--error-text);
+            min-height:18px;
+            margin-top:2px;
+            transition: max-height 0.3s, opacity 0.3s, margin 0.3s;
+            overflow:hidden;
+            max-height:0;
+            opacity:0;
+            margin-top:0;
+        }
+        .error-text.show { max-height:40px; opacity:1; margin-top:4px; }
+
+        .custom-select {
+            position:relative;
+            width:100%;
+            cursor:pointer;
+            user-select:none;
+        }
+        .custom-select-trigger {
+            width:100%;
+            padding:12px 42px 12px 14px;
+            border:1px solid var(--border-color);
+            border-radius:12px;
+            background: var(--bg-select);
+            color: var(--text-primary);
+            font-family:'Inter',sans-serif;
+            font-size:16px;
+            font-weight:500;
+            outline:none;
+            transition: border-color 0.2s, box-shadow 0.2s, background 0.3s, color 0.3s;
+            cursor:pointer;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            position:relative;
+        }
+        .custom-select-trigger::after {
+            content:"";
+            position:absolute;
+            right:16px;
+            top:50%;
+            transform:translateY(-50%);
+            width:12px;
+            height:8px;
+            background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239299A2' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center;
+            background-size:contain;
+            transition:transform 0.3s;
+        }
+        .custom-select.open .custom-select-trigger::after {
+            transform:translateY(-50%) rotate(180deg);
+        }
+        .custom-select-trigger:focus {
+            border-color: var(--accent);
+            box-shadow:0 0 0 3px rgba(var(--accent-rgb),0.15);
+        }
+        .custom-select-options {
+            display:none;
+            position:absolute;
+            top:calc(100% + 4px);
+            left:0;
+            right:0;
+            background: var(--bg-card);
+            border:1px solid var(--border-color);
+            border-radius:12px;
+            padding:4px 0;
+            z-index:100;
+            max-height:200px;
+            overflow-y:auto;
+            box-shadow:0 8px 20px rgba(0,0,0,0.6);
+            opacity:0;
+            transform:scaleY(0.9);
+            transform-origin:top center;
+            transition: opacity 0.25s, transform 0.25s;
+        }
+        .custom-select.open .custom-select-options {
+            display:block;
+            opacity:1;
+            transform:scaleY(1);
+        }
+        .custom-select-option {
+            padding:10px 14px;
+            color: var(--text-secondary);
+            font-family:'Inter',sans-serif;
+            font-size:14px;
+            font-weight:400;
+            transition:background 0.15s, color 0.15s;
+            cursor:pointer;
+        }
+        .custom-select-option:hover {
+            background: var(--bg-option-hover);
+            color: var(--text-primary);
+        }
+        .custom-select-option.selected {
+            background: var(--bg-option-selected);
+            color: var(--accent);
+            font-weight:500;
+        }
+
+        .radio-group {
+            display:flex;
+            flex-wrap:wrap;
+            gap:8px;
+            margin-top:4px;
+        }
+        .radio-group label {
+            flex:1 1 calc(50% - 4px);
+            min-width:0;
+            padding:12px 10px;
+            border:1px solid var(--border-color);
+            border-radius:12px;
+            background: var(--bg-radio);
+            color: var(--text-secondary);
+            font-size:15px;
+            font-weight:400;
+            text-align:center;
+            cursor:pointer;
+            transition:all 0.25s;
+            user-select:none;
+            white-space:nowrap;
+            transform:scale(1);
+        }
+        .radio-group label:has(input:checked) {
+            border-color: var(--accent);
+            color: var(--text-primary);
+            background: rgba(var(--accent-rgb),0.08);
+            transform:scale(1.02);
+        }
+        .radio-group label.disabled {
+            opacity:0.4;
+            pointer-events:none;
+            filter:grayscale(1);
+        }
+        .radio-group input[type="radio"] { display:none; }
+
+        .toggles { display:flex; flex-direction:column; gap:14px; margin-top:6px; padding-top:14px; border-top:1px solid var(--border-color); }
+        .toggle-item { display:flex; align-items:center; justify-content:space-between; }
+        .toggle-item span {
+            font-size:16px;
+            font-weight:500;
+            color: var(--text-secondary);
+            transition: color 0.3s;
+        }
+        .toggle-item .saving {
+            font-size:13px;
+            font-weight:400;
+            color: var(--saving-text);
+            background: var(--saving-bg);
+            padding:2px 12px;
+            border-radius:16px;
+            margin-right:8px;
+            opacity:0;
+            transition:opacity 0.25s;
+            white-space:nowrap;
+        }
+        .toggle-item .saving.show { opacity:1; }
+
+        .switch {
+            position:relative;
+            width:43px;
+            height:24px;
+            flex-shrink:0;
+            cursor:pointer;
+        }
+        .switch input { opacity:0; width:0; height:0; }
+        .slider-toggle {
+            position:absolute;
+            top:0;
+            left:0;
+            right:0;
+            bottom:0;
+            background: var(--switch-off);
+            border-radius:22px;
+            transition:background 0.2s;
+        }
+        .slider-toggle::before {
+            content:"";
+            position:absolute;
+            height:17px;
+            width:17px;
+            left:3px;
+            top:50%;
+            transform:translateY(-50%);
+            background: var(--bg-card);
+            border-radius:50%;
+            transition:transform 0.2s, background 0.2s;
+            box-shadow:0 1px 3px rgba(0,0,0,0.4);
+        }
+        .switch input:checked + .slider-toggle { background: var(--switch-on); }
+        .switch input:checked + .slider-toggle::before {
+            transform:translateY(-50%) translateX(19px);
+            background: var(--bg-body);
+        }
+
+        .result {
+            background: var(--result-bg);
+            border-radius:20px;
+            padding:20px;
+            border:1px solid var(--border-color);
+            display:flex;
+            flex-direction:column;
+            gap:16px;
+            width:100%;
+            max-width:100%;
+            position:relative;
+            padding-bottom:20px;
+            transition: background 0.3s, border-color 0.3s;
+            overflow:hidden;
+            flex:1;
+        }
+        .result-item {
+            display:flex;
+            justify-content:space-between;
+            align-items:baseline;
+            padding-bottom:10px;
+            border-bottom:1px solid var(--border-color);
+            flex-shrink:0;
+        }
+        .result-item:last-of-type { border-bottom:none; padding-bottom:0; }
+        .result-item .label {
+            font-size:16px;
+            font-weight:500;
+            color: var(--text-muted);
+            transition: color 0.3s;
+        }
+        .result-item .value {
+            font-size:20px;
+            font-weight:700;
+            color: var(--text-primary);
+            letter-spacing:-0.2px;
+            white-space:nowrap;
+            transition: transform 0.25s, color 0.3s;
+        }
+        .result-item .value.pulse {
+            transform:scale(1.05);
+            color: var(--accent);
+        }
+        .result-item .value.highlight {
+            color: var(--accent);
+            font-size:24px;
+        }
+        .result-item .value .currency {
+            font-size:14px;
+            font-weight:500;
+            color: var(--text-dim);
+            margin-left:2px;
+            transition: color 0.3s;
+        }
+
+        .graph-wrapper {
+            max-height:0;
+            overflow:hidden;
+            opacity:0;
+            transition: max-height 0.5s, opacity 0.3s;
+            flex:1;
+        }
+        .graph-wrapper.open {
+            max-height: 9999px;
+            opacity:1;
+        }
+
+        .btn-graph {
+            padding:14px;
+            background: var(--accent);
+            border:none;
+            border-radius:16px;
+            font-family:'Inter',sans-serif;
+            font-size:15px;
+            font-weight:600;
+            color: var(--bg-body);
+            cursor:pointer;
+            width:100%;
+            letter-spacing:0.2px;
+            transition: transform 0.15s, background 0.3s, color 0.3s;
+            text-align:center;
+            margin-top: auto;
+            flex-shrink:0;
+        }
+        .btn-graph:hover { background: var(--accent-hover); }
+        .btn-graph:active { transform:scale(0.97); }
+
+        .year-carousel {
+            display:flex;
+            overflow-x:auto;
+            overflow-y:hidden;
+            scroll-snap-type:x mandatory;
+            -webkit-overflow-scrolling:touch;
+            scrollbar-width:none;
+            padding:8px 0;
+            gap:16px;
+            white-space:nowrap;
+            scroll-behavior:smooth;
+        }
+        .year-carousel::-webkit-scrollbar { display:none; }
+        .year-carousel .carousel-item {
+            flex:0 0 auto;
+            scroll-snap-align:start;
+            padding:4px 0;
+            font-size:20px;
+            font-weight:400;
+            color: var(--text-dim);
+            cursor:pointer;
+            transition: color 0.2s, font-weight 0.2s, border-bottom 0.2s;
+            user-select:none;
+            text-align:center;
+            border-bottom:3px solid transparent;
+        }
+        .year-carousel .carousel-item.active {
+            color: var(--text-primary);
+            font-weight:600;
+            border-bottom-color: var(--accent);
+        }
+        .year-carousel .carousel-item:active { transform:scale(0.95); }
+
+        .year-details {
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:8px 12px;
+            padding:8px 0 0 0;
+            margin-top:4px;
+            margin-bottom:20px;
+            background:transparent;
+            border:none;
+            border-radius:0;
+        }
+        .detail-item { display:flex; flex-direction:column; }
+        .detail-item .label {
+            font-size:10px;
+            font-weight:400;
+            color: var(--text-muted);
+            text-transform:uppercase;
+            letter-spacing:0.3px;
+            margin-bottom:1px;
+            transition: color 0.3s;
+        }
+        .detail-item .value {
+            font-size:16px;
+            font-weight:600;
+            color: var(--text-primary);
+            line-height:1.2;
+            transition: opacity 0.3s, transform 0.3s, color 0.3s;
+        }
+        .detail-item .value.fade-out {
+            opacity:0;
+            transform:translateY(-4px);
+        }
+        .detail-item .value.highlight { color: var(--accent); }
+        .detail-item .value .currency {
+            font-size:12px;
+            font-weight:400;
+            color: var(--text-dim);
+            margin-left:2px;
+            transition: color 0.3s;
+        }
+
+        .popup-overlay {
+            display:none;
+            position:fixed;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background: var(--popup-overlay);
+            z-index:1000;
+            align-items:center;
+            justify-content:center;
+            animation:fadeIn 0.25s;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            transition: background 0.3s;
+        }
+        .popup-overlay.active { display:flex; }
+        .popup {
+            background: var(--bg-card);
+            border-radius:24px;
+            padding:24px 20px 30px;
+            max-width:480px;
+            width:100%;
+            max-height:90vh;
+            display:flex;
+            flex-direction:column;
+            position:relative;
+            box-shadow:0 20px 60px rgba(0,0,0,0.8);
+            animation:slideUp 0.3s;
+            border:1px solid var(--border-color);
+            transition: background 0.3s, border-color 0.3s;
+        }
+        .popup-close {
+            position:absolute;
+            top:16px;
+            right:16px;
+            background:transparent;
+            border:none;
+            color: var(--text-dim);
+            font-size:24px;
+            cursor:pointer;
+            transition:color 0.2s;
+            padding:4px;
+            line-height:1;
+        }
+        .popup-close:hover { color: var(--text-primary); }
+        .popup .popup-title {
+            font-size:18px;
+            font-weight:600;
+            color: var(--text-primary);
+            margin-bottom:16px;
+            text-align:center;
+            transition: color 0.3s;
+        }
+        @keyframes fadeIn {
+            from { opacity:0; }
+            to { opacity:1; }
+        }
+        @keyframes slideUp {
+            from { transform:translateY(30px); opacity:0; }
+            to { transform:translateY(0); opacity:1; }
+        }
+
+        /* ========== МОБИЛЬНАЯ ВЕРСИЯ (до 600px) ========== */
+        @media (max-width:599px) {
+            .graph-wrapper { display:none !important; }
+            .btn-graph .btn-text-desktop { display:none; }
+            .btn-graph .btn-text-mobile { display:inline; }
+            .btn-graph { font-size:15px; padding:14px; margin-top:16px; }
+
+            /* ПОПАП — СКРУГЛЁННЫЙ С ОТСТУПАМИ */
+            .popup {
+                max-width: calc(100% - 24px);
+                width: 100%;
+                max-height: 85vh;
+                border-radius: 24px;
+                margin: 0 12px;
+                padding: 20px 16px 24px;
+                box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+                border: 1px solid var(--border-color);
+            }
+            .popup .popup-title {
+                font-size: 18px;
+                margin-bottom: 12px;
+            }
+            .popup .year-carousel .carousel-item {
+                font-size: 26px;
+                padding: 6px 0;
+            }
+            .popup .year-details {
+                gap: 12px 16px;
+                padding: 12px 0 0 0;
+            }
+            .popup .detail-item .label {
+                font-size: 12px;
+            }
+            .popup .detail-item .value {
+                font-size: 20px;
+            }
+            .popup .detail-item .value .currency {
+                font-size: 14px;
+            }
+            .popup-close {
+                top: 12px;
+                right: 12px;
+                font-size: 28px;
+            }
+
+            .theme-switcher-wrapper {
+                justify-content:center;
+            }
+            .theme-switcher {
+                width:100%;
+                justify-content:space-around;
+                border-radius:12px;
+                padding:6px 4px;
+            }
+            .theme-btn {
+                width:100%;
+                height:40px;
+                border-radius:8px;
+                flex:1;
+            }
+            .header-global { margin-top:8px; }
+        }
+        @media (min-width:600px) {
+            .btn-graph .btn-text-mobile { display:none; }
+            .btn-graph .btn-text-desktop { display:inline; }
+            .popup-overlay { display:none !important; }
+            .theme-switcher-wrapper {
+                justify-content:flex-end;
+            }
+            .theme-switcher {
+                width:auto;
+                padding:6px 10px;
+            }
+            .theme-btn {
+                width:44px;
+                height:34px;
+                flex:0 0 auto;
+            }
+        }
+
+        /* ========== ПЛАНШЕТЫ (от 600px) ========== */
+        @media (min-width:600px) {
+            .card { padding:28px 32px; border-radius:28px; }
+            .header-global h1 { font-size:26px; }
+            .header-global .subtitle { font-size:16px; margin-bottom:28px; }
+            .grid { gap:28px; }
+            .params { gap:24px; }
+            .param-group label { font-size:15px; }
+            .param-group label span:last-child { font-size:16px; }
+            .result { padding:28px; gap:20px; border-radius:24px; padding-bottom:28px; }
+            .result-item .value { font-size:22px; }
+            .result-item .value.highlight { font-size:28px; }
+            .btn-graph { font-size:16px; padding:16px; border-radius:18px; }
+            .toggle-item span { font-size:15px; }
+            .toggle-item .saving { font-size:13px; margin-right:10px; }
+            .switch { width:48px; height:28px; }
+            .slider-toggle::before { height:17px; width:17px; left:3px; }
+            .switch input:checked + .slider-toggle::before { transform:translateY(-50%) translateX(25px); }
+            .year-carousel { gap:16px; }
+            .year-carousel .carousel-item { font-size:22px; }
+            .year-details { padding:12px 0 0 0; gap:10px 20px; margin-top:8px; margin-bottom:24px; }
+            .detail-item .label { font-size:12px; }
+            .detail-item .value { font-size:20px; }
+            .detail-item .value .currency { font-size:14px; }
+            .custom-select-trigger { font-size:15px; padding:12px 42px 12px 14px; }
+            .custom-select-option { font-size:15px; padding:12px 16px; }
+            .radio-group { flex-wrap:nowrap; }
+            .radio-group label { flex:1 1 0; padding:12px 12px; font-size:13px; }
+            .param-group label { font-size:15px; }
+            .param-group label span:last-child { font-size:16px; }
+            .param-group { gap:10px; }
+            .error-text { font-size:12px; }
+            .result-item .label { font-size:14px; }
+            .result-item .value { font-size:22px; }
+            .result-item .value.highlight { font-size:28px; }
+            .result-item .value .currency { font-size:14px; }
+            .btn-graph { font-size:16px; padding:16px; }
+            .toggles { gap:12px; }
+            .toggle-item span { font-size:15px; }
+            .toggle-item .saving { font-size:13px; }
+            .switch { width:48px; height:28px; }
+            .slider-toggle::before { height:17px; width:17px; }
+            .switch input:checked + .slider-toggle::before { transform:translateY(-50%) translateX(25px); }
+            .custom-select-trigger { padding:12px 42px 12px 14px; font-size:15px; }
+            .radio-group label { font-size:13px; padding:12px 12px; }
+        }
+
+        /* ========== ДЕСКТОПЫ (от 900px) ========== */
+        @media (min-width:900px) {
+            body { padding:24px; }
+            .app-wrapper { gap:16px; }
+            .card { padding:44px 52px; border-radius:36px; }
+            .header-global { display:none; }
+            .params-header { display:block; }
+            .grid { flex-direction:row; gap:48px; align-items:stretch; }
+            .params { flex:0 0 45%; max-width:45%; gap:28px; }
+            .result { flex:1; min-width:0; padding:32px 36px; gap:20px; border-radius:28px; display:flex; flex-direction:column; justify-content:flex-start; padding-bottom:32px; }
+            .result-item { padding-bottom:8px; }
+            .result-item .value { font-size:22px; }
+            .result-item .value.highlight { font-size:28px; }
+            .btn-graph { font-size:16px; padding:14px; border-radius:16px; }
+            .toggle-item span { font-size:16px; }
+            .toggle-item .saving { font-size:14px; margin-right:12px; }
+            .switch { width:51px; height:29px; }
+            .slider-toggle::before { height:20px; width:20px; left:3px; }
+            .switch input:checked + .slider-toggle::before { transform:translateY(-50%) translateX(25px); }
+            .graph-wrapper.open { max-height: 9999px; }
+            .year-carousel { gap:24px; }
+            .year-carousel .carousel-item { font-size:26px; }
+            .year-details { padding:16px 0 0 0; gap:12px 24px; margin-top:12px; margin-bottom:28px; }
+            .detail-item .label { font-size:13px; }
+            .detail-item .value { font-size:22px; }
+            .detail-item .value .currency { font-size:15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-wrapper">
+        <div class="theme-switcher-wrapper">
+            <div class="theme-switcher" id="themeSwitcher">
+                <button class="theme-btn theme-btn-dark active" data-theme="dark" title="Тёмная (Т-Банк)"></button>
+                <button class="theme-btn theme-btn-light" data-theme="light" title="Светлая (Сбер)"></button>
+                <button class="theme-btn theme-btn-red" data-theme="red" title="Красная (Альфа)"></button>
+                <button class="theme-btn theme-btn-blue" data-theme="blue" title="Синяя (ВТБ)"></button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="header-global">
+                <h1>Ипотека</h1>
+                <p class="subtitle">Рассчитайте условия за 2 минуты</p>
+            </div>
+            <div class="grid">
+                <div class="params">
+                    <div class="params-header">
+                        <h1>Ипотека</h1>
+                        <p class="subtitle">Рассчитайте условия за 2 минуты</p>
+                    </div>
+                    <div class="param-group">
+                        <label><span>Стоимость</span><span id="priceLabel">5 000 000 ₽</span></label>
+                        <input type="range" id="price" min="1000000" max="30000000" step="100000" value="5000000">
+                    </div>
+                    <div class="param-group">
+                        <label><span>Первоначальный взнос</span><span id="downLabel">1 000 000 ₽</span></label>
+                        <input type="range" id="down" min="0" max="30000000" step="100000" value="1000000">
+                        <div class="error-text" id="downError"></div>
+                    </div>
+                    <div class="param-group">
+                        <label><span>Срок</span><span id="termLabel">15 лет</span></label>
+                        <input type="range" id="term" min="5" max="30" step="1" value="15">
+                    </div>
+
+                    <div class="param-group">
+                        <label>Цель кредита</label>
+                        <div class="custom-select" id="creditPurposeCustom">
+                            <div class="custom-select-trigger" id="creditPurposeTrigger">Покупка готового жилья</div>
+                            <div class="custom-select-options" id="creditPurposeOptions">
+                                <div class="custom-select-option selected" data-value="purchase">Покупка готового жилья</div>
+                                <div class="custom-select-option" data-value="construction">Строительство дома</div>
+                                <div class="custom-select-option" data-value="refinance">Рефинансирование</div>
+                                <div class="custom-select-option" data-value="secondary">Вторичное жильё</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="param-group">
+                        <label>Тип ипотеки</label>
+                        <div class="radio-group" id="mortgageTypeGroup">
+                            <label><input type="radio" name="mortgageType" value="standard" checked> Стандартная</label>
+                            <label><input type="radio" name="mortgageType" value="family"> Семейная</label>
+                            <label><input type="radio" name="mortgageType" value="government"> Военная</label>
+                            <label><input type="radio" name="mortgageType" value="it"> IT</label>
+                        </div>
+                    </div>
+
+                    <div class="toggles">
+                        <div class="toggle-item">
+                            <span>Страховка <span style="font-weight:400;color:var(--text-dim);font-size:12px;">(−0.5%)</span></span>
+                            <div style="display:flex;align-items:center;">
+                                <span class="saving" id="insuranceSaving">экономия 0 ₽</span>
+                                <label class="switch"><input type="checkbox" id="insuranceToggle"><span class="slider-toggle"></span></label>
+                            </div>
+                        </div>
+                        <div class="toggle-item">
+                            <span><span id="salaryLabel">Зарплатный клиент</span> <span style="font-weight:400;color:var(--text-dim);font-size:12px;">(−0.3%)</span></span>
+                            <div style="display:flex;align-items:center;">
+                                <span class="saving" id="salarySaving">экономия 0 ₽</span>
+                                <label class="switch"><input type="checkbox" id="salaryToggle"><span class="slider-toggle"></span></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="result">
+                    <div class="result-item">
+                        <span class="label">Сумма кредита</span>
+                        <span class="value" id="loanAmount">4 000 000 <span class="currency">₽</span></span>
+                    </div>
+                    <div class="result-item">
+                        <span class="label">Процентная ставка</span>
+                        <span class="value" id="rateDisplay">15.5 <span class="currency">%</span></span>
+                    </div>
+                    <div class="result-item">
+                        <span class="label" id="monthlyLabel">Ежемесячный платёж</span>
+                        <span class="value highlight" id="monthlyPayment">33 000 <span class="currency">₽</span></span>
+                    </div>
+                    <div class="result-item">
+                        <span class="label">Общая стоимость кредита</span>
+                        <span class="value" id="totalCost">0 <span class="currency">₽</span></span>
+                    </div>
+                    <div class="result-item" style="border-bottom: none; padding-bottom:0;">
+                        <span class="label">Переплата</span>
+                        <span class="value" id="overpayment">0 <span class="currency">₽</span></span>
+                    </div>
+
+                    <div class="graph-wrapper" id="graphWrapper">
+                        <div class="year-carousel" id="yearCarousel"></div>
+                        <div class="year-details" id="yearDetails"></div>
+                    </div>
+
+                    <button class="btn-graph" id="toggleGraphBtn">
+                        <span class="btn-text-desktop">Показать график платежей</span>
+                        <span class="btn-text-mobile">Показать график</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== ПОПАП ===== -->
+    <div class="popup-overlay" id="popupOverlay">
+        <div class="popup" id="popup">
+            <button class="popup-close" id="popupClose">✕</button>
+            <div class="popup-title">График платежей</div>
+            <div class="year-carousel" id="popupCarousel"></div>
+            <div class="year-details" id="popupDetails"></div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // DOM элементы
+            const priceSlider = document.getElementById('price');
+            const downSlider = document.getElementById('down');
+            const termSlider = document.getElementById('term');
+            const priceLabel = document.getElementById('priceLabel');
+            const downLabel = document.getElementById('downLabel');
+            const termLabel = document.getElementById('termLabel');
+            const downError = document.getElementById('downError');
+            const insuranceToggle = document.getElementById('insuranceToggle');
+            const salaryToggle = document.getElementById('salaryToggle');
+            const insuranceSaving = document.getElementById('insuranceSaving');
+            const salarySaving = document.getElementById('salarySaving');
+            const loanAmount = document.getElementById('loanAmount');
+            const rateDisplay = document.getElementById('rateDisplay');
+            const monthlyPayment = document.getElementById('monthlyPayment');
+            const monthlyLabel = document.getElementById('monthlyLabel');
+            const salaryLabel = document.getElementById('salaryLabel');
+            const totalCostEl = document.getElementById('totalCost');
+            const overpaymentEl = document.getElementById('overpayment');
+            const toggleGraphBtn = document.getElementById('toggleGraphBtn');
+            const graphWrapper = document.getElementById('graphWrapper');
+            const yearCarousel = document.getElementById('yearCarousel');
+            const yearDetails = document.getElementById('yearDetails');
+            const popupOverlay = document.getElementById('popupOverlay');
+            const popupCarousel = document.getElementById('popupCarousel');
+            const popupDetails = document.getElementById('popupDetails');
+            const popupClose = document.getElementById('popupClose');
+
+            const customSelect = document.getElementById('creditPurposeCustom');
+            const trigger = document.getElementById('creditPurposeTrigger');
+            const optionsContainer = document.getElementById('creditPurposeOptions');
+            const options = optionsContainer.querySelectorAll('.custom-select-option');
+
+            const mortgageRadios = document.querySelectorAll('input[name="mortgageType"]');
+
+            // Переключение тем
+            const themeButtons = document.querySelectorAll('.theme-btn');
+            themeButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const theme = this.dataset.theme;
+                    themeButtons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    document.body.classList.remove('theme-light', 'theme-red', 'theme-blue');
+                    if (theme !== 'dark') {
+                        document.body.classList.add('theme-' + theme);
+                    }
+                });
+            });
+
+            let currentPrice = 5000000, currentDown = 1000000, currentTerm = 15;
+            let insuranceActive = false, salaryActive = false;
+            let selectedMortgageType = 'standard';
+            let selectedPurpose = 'purchase';
+            let scheduleData = [];
+            let selectedYearIndex = 0;
+            let accumulatedDelta = 0;
+            const WHEEL_THRESHOLD = 72;
+
+            const rates = {
+                standard: 15.5,
+                family: 6,
+                government: 8,
+                it: 4
+            };
+
+            const availability = {
+                purchase: ['standard', 'family', 'government', 'it'],
+                construction: ['family', 'government'],
+                refinance: ['standard', 'it'],
+                secondary: ['standard', 'family', 'government', 'it']
+            };
+
+            function formatNum(n) { return n.toLocaleString('ru-RU'); }
+
+            function calcAnnuity(loan, ratePercent, months) {
+                if (loan <= 0 || months <= 0) return 0;
+                const rate = ratePercent / 100 / 12;
+                const factor = Math.pow(1 + rate, months);
+                return loan * rate * factor / (factor - 1);
+            }
+
+            function getCurrentRate() {
+                let rate = rates[selectedMortgageType] || rates.standard;
+                if (insuranceActive) rate -= 0.5;
+                if (salaryActive) rate -= 0.3;
+                return Math.max(rate, 0);
+            }
+
+            function updateMortgageTypes() {
+                const allowed = availability[selectedPurpose] || [];
+                let firstAvailable = allowed[0] || 'standard';
+
+                mortgageRadios.forEach(radio => {
+                    const label = radio.closest('label');
+                    const isAllowed = allowed.includes(radio.value);
+                    if (isAllowed) {
+                        label.classList.remove('disabled');
+                        radio.disabled = false;
+                    } else {
+                        label.classList.add('disabled');
+                        radio.disabled = true;
+                    }
+                });
+
+                if (!allowed.includes(selectedMortgageType)) {
+                    mortgageRadios.forEach(r => r.checked = false);
+                    const firstRadio = document.querySelector(`input[name="mortgageType"][value="${firstAvailable}"]`);
+                    if (firstRadio) {
+                        firstRadio.checked = true;
+                        selectedMortgageType = firstAvailable;
+                    }
+                } else {
+                    const currentRadio = document.querySelector(`input[name="mortgageType"][value="${selectedMortgageType}"]`);
+                    if (currentRadio) currentRadio.checked = true;
+                }
+                updateAll();
+            }
+
+            function buildScheduleData(loan, ratePercent, months) {
+                const rate = ratePercent / 100 / 12;
+                let balance = loan;
+                const data = [];
+                const years = Math.min(Math.ceil(months / 12), 30);
+                for (let year = 1; year <= years; year++) {
+                    const monthsInYear = Math.min(12, months - (year-1)*12);
+                    let principalPaid = 0, interestPaid = 0;
+                    for (let m = 0; m < monthsInYear; m++) {
+                        const interest = balance * rate;
+                        const payment = calcAnnuity(loan, ratePercent, months);
+                        const principal = payment - interest;
+                        if (balance < payment) {
+                            principalPaid += balance;
+                            interestPaid += 0;
+                            balance = 0;
+                            break;
+                        }
+                        principalPaid += principal;
+                        interestPaid += interest;
+                        balance -= principal;
+                    }
+                    if (balance < 0) balance = 0;
+                    data.push({ year, balance: Math.round(balance), principal: Math.round(principalPaid), interest: Math.round(interestPaid) });
+                    if (balance <= 0) break;
+                }
+                return data;
+            }
+
+            function updateActiveYear(index, targetCarousel, targetDetails) {
+                if (index < 0) index = 0;
+                if (index >= scheduleData.length) index = scheduleData.length - 1;
+                if (index === selectedYearIndex && targetCarousel === yearCarousel) return;
+                selectedYearIndex = index;
+                const items = targetCarousel.querySelectorAll('.carousel-item');
+                items.forEach((el, i) => {
+                    el.classList.toggle('active', i === index);
+                });
+                renderYearDetails(index, targetDetails);
+                const activeEl = targetCarousel.querySelector('.carousel-item.active');
+                if (activeEl) {
+                    const scrollLeft = activeEl.offsetLeft - targetCarousel.clientWidth/2 + activeEl.clientWidth/2;
+                    targetCarousel.scrollTo({ left: scrollLeft, behavior: 'smooth' });
+                }
+            }
+
+            function renderCalendar(data) {
+                if (!data || data.length === 0) {
+                    yearCarousel.innerHTML = '<span style="color:var(--text-muted);text-align:center;padding:8px;">Нет данных</span>';
+                    yearDetails.innerHTML = '<span style="color:var(--text-muted);text-align:center;">Нет данных</span>';
+                    popupCarousel.innerHTML = '<span style="color:var(--text-muted);text-align:center;padding:8px;">Нет данных</span>';
+                    popupDetails.innerHTML = '<span style="color:var(--text-muted);text-align:center;">Нет данных</span>';
+                    return;
+                }
+
+                let carouselHtml = '';
+                data.forEach((item, index) => {
+                    const activeClass = (index === selectedYearIndex) ? 'active' : '';
+                    carouselHtml += `<div class="carousel-item ${activeClass}" data-index="${index}">${item.year}</div>`;
+                });
+                yearCarousel.innerHTML = carouselHtml;
+                let popupHtml = '';
+                data.forEach((item, index) => {
+                    const activeClass = (index === selectedYearIndex) ? 'active' : '';
+                    popupHtml += `<div class="carousel-item ${activeClass}" data-index="${index}">${item.year}</div>`;
+                });
+                popupCarousel.innerHTML = popupHtml;
+
+                renderYearDetails(selectedYearIndex, yearDetails);
+                renderYearDetails(selectedYearIndex, popupDetails);
+
+                yearCarousel.querySelectorAll('.carousel-item').forEach(item => {
+                    item.removeEventListener('click', onCarouselItemClick);
+                    item.addEventListener('click', onCarouselItemClick);
+                });
+                popupCarousel.querySelectorAll('.carousel-item').forEach(item => {
+                    item.removeEventListener('click', onPopupCarouselItemClick);
+                    item.addEventListener('click', onPopupCarouselItemClick);
+                });
+
+                const activeEl = yearCarousel.querySelector('.carousel-item.active');
+                if (activeEl && graphWrapper.classList.contains('open')) {
+                    const scrollLeft = activeEl.offsetLeft - yearCarousel.clientWidth/2 + activeEl.clientWidth/2;
+                    yearCarousel.scrollTo({ left: scrollLeft, behavior: 'smooth' });
+                }
+
+                if (window.innerWidth >= 900) {
+                    yearCarousel.removeEventListener('wheel', onWheel);
+                    yearCarousel.addEventListener('wheel', onWheel, { passive: false });
+                }
+                popupCarousel.removeEventListener('scroll', onPopupScroll);
+                popupCarousel.addEventListener('scroll', onPopupScroll);
+            }
+
+            function onCarouselItemClick(e) {
+                const index = parseInt(this.dataset.index);
+                if (isNaN(index)) return;
+                if (index === selectedYearIndex) return;
+                updateActiveYear(index, yearCarousel, yearDetails);
+                updateActiveYear(index, popupCarousel, popupDetails);
+                if (graphWrapper.classList.contains('open')) updateGraph();
+            }
+
+            function onPopupCarouselItemClick(e) {
+                const index = parseInt(this.dataset.index);
+                if (isNaN(index)) return;
+                if (index === selectedYearIndex) return;
+                updateActiveYear(index, popupCarousel, popupDetails);
+                updateActiveYear(index, yearCarousel, yearDetails);
+                if (graphWrapper.classList.contains('open')) updateGraph();
+            }
+
+            function onWheel(e) {
+                e.preventDefault();
+                const delta = e.deltaY;
+                accumulatedDelta += delta;
+                const steps = Math.floor(Math.abs(accumulatedDelta) / WHEEL_THRESHOLD);
+                if (steps === 0) return;
+                const direction = accumulatedDelta > 0 ? 1 : -1;
+                const newIndex = Math.min(Math.max(selectedYearIndex + direction * steps, 0), scheduleData.length - 1);
+                if (newIndex !== selectedYearIndex) {
+                    updateActiveYear(newIndex, yearCarousel, yearDetails);
+                    updateActiveYear(newIndex, popupCarousel, popupDetails);
+                    if (graphWrapper.classList.contains('open')) updateGraph();
+                }
+                accumulatedDelta = 0;
+            }
+
+            function onPopupScroll(e) {
+                const wrapper = e.target;
+                const items = wrapper.querySelectorAll('.carousel-item');
+                if (!items.length) return;
+                const center = wrapper.scrollLeft + wrapper.clientWidth / 2;
+                let closestIndex = 0;
+                let minDist = Infinity;
+                items.forEach((item, idx) => {
+                    const rect = item.getBoundingClientRect();
+                    const wrapperRect = wrapper.getBoundingClientRect();
+                    const itemCenter = rect.left + rect.width / 2;
+                    const wrapperCenter = wrapperRect.left + wrapperRect.width / 2;
+                    const dist = Math.abs(itemCenter - wrapperCenter);
+                    if (dist < minDist) {
+                        minDist = dist;
+                        closestIndex = idx;
+                    }
+                });
+                if (closestIndex !== selectedYearIndex && closestIndex < scheduleData.length) {
+                    updateActiveYear(closestIndex, popupCarousel, popupDetails);
+                    updateActiveYear(closestIndex, yearCarousel, yearDetails);
+                    if (graphWrapper.classList.contains('open')) updateGraph();
+                }
+            }
+
+            function renderYearDetails(index, target) {
+                if (!scheduleData || scheduleData.length === 0 || index >= scheduleData.length) {
+                    target.innerHTML = '<span style="color:var(--text-muted);text-align:center;">Нет данных</span>';
+                    return;
+                }
+                const item = scheduleData[index];
+                const oldValues = target.querySelectorAll('.detail-item .value');
+                if (oldValues.length) {
+                    oldValues.forEach(el => el.classList.add('fade-out'));
+                }
+                setTimeout(() => {
+                    target.innerHTML = `
+                        <div class="detail-item"><span class="label">Год</span><span class="value">${item.year}</span></div>
+                        <div class="detail-item"><span class="label">Остаток долга</span><span class="value">${formatNum(item.balance)} <span class="currency">₽</span></span></div>
+                        <div class="detail-item"><span class="label">Основной долг</span><span class="value">${formatNum(item.principal)} <span class="currency">₽</span></span></div>
+                        <div class="detail-item"><span class="label">Проценты</span><span class="value">${formatNum(item.interest)} <span class="currency">₽</span></span></div>
+                    `;
+                    requestAnimationFrame(() => {
+                        target.querySelectorAll('.detail-item .value').forEach(el => {
+                            el.classList.remove('fade-out');
+                        });
+                    });
+                }, 300);
+            }
+
+            function updateGraph() {
+                const loan = currentPrice - currentDown;
+                if (loan <= 0 || currentDown > currentPrice) {
+                    graphWrapper.classList.remove('open');
+                    toggleGraphBtn.textContent = window.innerWidth < 600 ? 'Показать график' : 'Показать график платежей';
+                    return;
+                }
+                const rate = getCurrentRate();
+                const months = currentTerm * 12;
+                scheduleData = buildScheduleData(loan, rate, months);
+                if (selectedYearIndex >= scheduleData.length) selectedYearIndex = 0;
+                renderCalendar(scheduleData);
+            }
+
+            function updateAll() {
+                const loan = currentPrice - currentDown;
+                const months = currentTerm * 12;
+
+                if (currentDown > currentPrice) {
+                    downError.textContent = 'Взнос не может превышать стоимость';
+                    downError.classList.add('show');
+                    loanAmount.innerHTML = `0 <span class="currency">₽</span>`;
+                    monthlyPayment.innerHTML = `0 <span class="currency">₽</span>`;
+                    totalCostEl.innerHTML = `0 <span class="currency">₽</span>`;
+                    overpaymentEl.innerHTML = `0 <span class="currency">₽</span>`;
+                    if (graphWrapper.classList.contains('open')) {
+                        graphWrapper.classList.remove('open');
+                        toggleGraphBtn.textContent = window.innerWidth < 600 ? 'Показать график' : 'Показать график платежей';
+                    }
+                    return;
+                } else {
+                    downError.classList.remove('show');
+                }
+
+                if (loan <= 0) {
+                    loanAmount.innerHTML = `0 <span class="currency">₽</span>`;
+                    monthlyPayment.innerHTML = `0 <span class="currency">₽</span>`;
+                    totalCostEl.innerHTML = `0 <span class="currency">₽</span>`;
+                    overpaymentEl.innerHTML = `0 <span class="currency">₽</span>`;
+                    if (graphWrapper.classList.contains('open')) {
+                        graphWrapper.classList.remove('open');
+                        toggleGraphBtn.textContent = window.innerWidth < 600 ? 'Показать график' : 'Показать график платежей';
+                    }
+                    return;
+                }
+
+                const rate = getCurrentRate();
+                const payment = calcAnnuity(loan, rate, months);
+                const totalCost = payment * months;
+                const overpayment = totalCost - loan;
+
+                const pulseElements = [loanAmount, monthlyPayment, totalCostEl, overpaymentEl];
+                pulseElements.forEach(el => {
+                    el.classList.add('pulse');
+                    setTimeout(() => el.classList.remove('pulse'), 300);
+                });
+
+                loanAmount.innerHTML = `${formatNum(loan)} <span class="currency">₽</span>`;
+                rateDisplay.innerHTML = `${rate.toFixed(1)} <span class="currency">%</span>`;
+                monthlyPayment.innerHTML = `${formatNum(Math.round(payment))} <span class="currency">₽</span>`;
+                totalCostEl.innerHTML = `${formatNum(Math.round(totalCost))} <span class="currency">₽</span>`;
+                overpaymentEl.innerHTML = `${formatNum(Math.round(overpayment))} <span class="currency">₽</span>`;
+
+                if (insuranceActive) {
+                    let rateWithoutInsurance = rates[selectedMortgageType] || rates.standard;
+                    if (salaryActive) rateWithoutInsurance -= 0.3;
+                    const paymentWithoutInsurance = calcAnnuity(loan, rateWithoutInsurance, months);
+                    const saving = Math.round(paymentWithoutInsurance - payment);
+                    insuranceSaving.textContent = `экономия ${formatNum(saving)} ₽`;
+                    insuranceSaving.classList.add('show');
+                } else {
+                    insuranceSaving.classList.remove('show');
+                }
+
+                if (salaryActive) {
+                    let rateWithoutSalary = rates[selectedMortgageType] || rates.standard;
+                    if (insuranceActive) rateWithoutSalary -= 0.5;
+                    const paymentWithoutSalary = calcAnnuity(loan, rateWithoutSalary, months);
+                    const saving = Math.round(paymentWithoutSalary - payment);
+                    salarySaving.textContent = `экономия ${formatNum(saving)} ₽`;
+                    salarySaving.classList.add('show');
+                } else {
+                    salarySaving.classList.remove('show');
+                }
+
+                if (graphWrapper.classList.contains('open')) updateGraph();
+            }
+
+            function updateFromSliders() {
+                currentPrice = parseInt(priceSlider.value);
+                currentDown = parseInt(downSlider.value);
+                currentTerm = parseInt(termSlider.value);
+                priceLabel.textContent = `${formatNum(currentPrice)} ₽`;
+                downLabel.textContent = `${formatNum(currentDown)} ₽`;
+                termLabel.textContent = `${currentTerm} лет`;
+                updateAll();
+            }
+
+            function updateMobileLabels() {
+                const isMobile = window.innerWidth < 600;
+                monthlyLabel.textContent = isMobile ? 'Еж. платёж' : 'Ежемесячный платёж';
+                salaryLabel.textContent = isMobile ? 'Зарпл. клиент' : 'Зарплатный клиент';
+                toggleGraphBtn.textContent = isMobile ? 'Показать график' : 'Показать график платежей';
+            }
+
+            // Кастомный селект
+            function openSelect() {
+                customSelect.classList.add('open');
+            }
+            function closeSelect() {
+                customSelect.classList.remove('open');
+            }
+            function toggleSelect(e) {
+                e.stopPropagation();
+                if (customSelect.classList.contains('open')) closeSelect();
+                else openSelect();
+            }
+            function selectOption(optionEl) {
+                const value = optionEl.dataset.value;
+                const text = optionEl.textContent.trim();
+                trigger.textContent = text;
+                options.forEach(opt => opt.classList.remove('selected'));
+                optionEl.classList.add('selected');
+                selectedPurpose = value;
+                closeSelect();
+                updateMortgageTypes();
+            }
+
+            trigger.addEventListener('click', toggleSelect);
+            options.forEach(opt => {
+                opt.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    selectOption(this);
+                });
+            });
+            document.addEventListener('click', function(e) {
+                if (!customSelect.contains(e.target)) closeSelect();
+            });
+
+            mortgageRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.checked) {
+                        selectedMortgageType = this.value;
+                        updateAll();
+                    }
+                });
+            });
+
+            priceSlider.addEventListener('input', updateFromSliders);
+            downSlider.addEventListener('input', updateFromSliders);
+            termSlider.addEventListener('input', updateFromSliders);
+            insuranceToggle.addEventListener('change', function() { insuranceActive = this.checked; updateAll(); });
+            salaryToggle.addEventListener('change', function() { salaryActive = this.checked; updateAll(); });
+
+            toggleGraphBtn.addEventListener('click', function() {
+                const isMobile = window.innerWidth < 600;
+                if (isMobile) {
+                    const loan = currentPrice - currentDown;
+                    if (loan <= 0 || currentDown > currentPrice) return;
+                    if (!scheduleData || scheduleData.length === 0) updateGraph();
+                    popupOverlay.classList.add('active');
+                    updateActiveYear(selectedYearIndex, popupCarousel, popupDetails);
+                } else {
+                    const isOpen = graphWrapper.classList.contains('open');
+                    if (isOpen) {
+                        graphWrapper.classList.remove('open');
+                        this.textContent = 'Показать график платежей';
+                    } else {
+                        const loan = currentPrice - currentDown;
+                        if (loan <= 0 || currentDown > currentPrice) return;
+                        graphWrapper.classList.add('open');
+                        this.textContent = 'Скрыть график платежей';
+                        updateGraph();
+                    }
+                }
+            });
+
+            popupClose.addEventListener('click', function() {
+                popupOverlay.classList.remove('active');
+            });
+            popupOverlay.addEventListener('click', function(e) {
+                if (e.target === this) popupOverlay.classList.remove('active');
+            });
+
+            // Инициализация
+            updateMortgageTypes();
+            updateFromSliders();
+            updateMobileLabels();
+            window.addEventListener('resize', function() {
+                updateMobileLabels();
+                if (window.innerWidth >= 900) {
+                    yearCarousel.removeEventListener('wheel', onWheel);
+                    yearCarousel.addEventListener('wheel', onWheel, { passive: false });
+                } else {
+                    yearCarousel.removeEventListener('wheel', onWheel);
+                }
+            });
+        })();
+    </script>
+</body>
+</html>
